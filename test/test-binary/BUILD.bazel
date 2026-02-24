@@ -1,0 +1,6 @@
+load("//:defs.bzl", "godot_binary")
+
+godot_binary(
+    name = "godot-test",
+    srcs = glob(["**"]),
+)

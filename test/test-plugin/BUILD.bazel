@@ -1,0 +1,9 @@
+load("//:defs.bzl", "godot_binary")
+
+godot_binary(
+    name = "godot-plugin-test",
+    srcs = glob(["**"], exclude=[".godot/"]),
+    plugins = {
+        "//test/plugins:test-plugin.so": "bin/libgdexample.linux.template_debug.x86_64.so"
+    },
+)
