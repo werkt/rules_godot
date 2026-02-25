@@ -21,12 +21,14 @@ load("@rules_godot//:repository.bzl", "godot_repositories")
 godot_repositories()
 ```
 
+This will create a repository named "godot" that will be pinned and provide rules for this instance of the godot development framework.
+
 From an appropriate pinned commit reference point.
 
 In the root of a godot project directory:
 
 ```
-load("@rules_godot//:defs.bzl", "godot_binary")
+load("@godot//:defs.bzl", "godot_binary")
 
 godot_binary(
     name = "my-godot-app",
