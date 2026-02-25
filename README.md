@@ -7,7 +7,7 @@ Use this library to:
 1. Facilitate a single version (currently 4.4) Godot build of projects into binaries with export templates
 1. Build gdextensions against godot-cpp matching the above version
 
-WORKSPACE```
+```
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
@@ -25,7 +25,7 @@ From an appropriate pinned commit reference point.
 
 In the root of a godot project directory:
 
-BUILD```
+```
 load("@rules_godot//:defs.bzl", "godot_binary")
 
 godot_binary(
@@ -49,9 +49,7 @@ For editor import plugin:
 
 A symlink in the workspace will provide the link to a populated plugin with:
 
-```
-bazel build //test/plugins:all
-```
+`bazel build //test/plugins:all`
 
 The test/test-plugin project will then use this plugin while in the editor with the GDExample node type, and during application debug play.
 
