@@ -1,9 +1,7 @@
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 
 """godot_binary."""
-
-GODOT_EXPORT_TEMPLATES_REPO = "godot-export-templates"
-GODOT_VERSION_TAG = "4.4.stable"
 
 def _genrule_dir(ctx):
     dirs = []
@@ -69,6 +67,9 @@ _godot_binary = rule(
 def godot_binary(
         name,
         *,
+        export_templates = "godot-export-templates",
+        version = "4.4",
+        flavor = "stable",
         srcs = [],
         plugins = {}):
 
@@ -76,7 +77,7 @@ def godot_binary(
     # so that we can support generated content from the build root for a project, we construct the
     # working directory from provided srcs through a pkg_tar and extract
     remap_paths = {
-        "external/%s/templates" % GODOT_EXPORT_TEMPLATES_REPO: "godot/export_templates/%s" % GODOT_VERSION_TAG,
+        "external/%s/templates" % export_templates: "godot/export_templates/%s.%s" % (version, flavor),
     }
     plugin_names = []
     # translate plugin prefix from @repo//foo/bar:baz to external/repo/foo/bar/baz
@@ -90,7 +91,7 @@ def godot_binary(
     pkg_tar(
         name = "res_pkg",
         srcs = srcs + [
-            "@%s//:srcs" % GODOT_EXPORT_TEMPLATES_REPO,
+            "@%s//:srcs" % export_templates,
         ] + plugins.keys(),
         remap_paths = remap_paths,
         strip_prefix = ".",
