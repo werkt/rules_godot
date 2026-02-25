@@ -4,8 +4,8 @@ Godot Rules for Bazel
 
 Use this library to:
 
-1. Facilitate a single version (currently 4.4) Godot build of projects into binaries with export templates
-1. Build gdextensions against godot-cpp matching the above version
+1. Facilitate a Godot repository suite to build projects into binaries with export templates
+1. Build gdextensions against matching godot-cpp version
 
 ```
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
