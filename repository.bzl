@@ -63,7 +63,7 @@ filegroup(
 )""" % (version, flavor, os, architecture),
     )
 
-def _godot_export_templates(*, name, version, flavor, sha256, archive = "zip", **kwargs):
+def _godot_export_templates(*, repo_name, name, version, flavor, sha256, archive = "zip", **kwargs):
     query = {
         "version": version,
         "flavor": flavor,
@@ -75,7 +75,7 @@ def _godot_export_templates(*, name, version, flavor, sha256, archive = "zip", *
         urls = [_dl_godotengine(query)],
         sha256 = sha256,
         type = archive,
-        build_file = "//:godot-export-templates.BUILD",
+        build_file = "@%s//:godot-export-templates.BUILD" % repo_name,
     )
 
 def _sha256(name, *, architecture = None, platform = None, **kwargs):
@@ -158,6 +158,7 @@ def godot_repositories(*, repo_name = "rules_godot", name = "godot", version = "
 
     _godot_export_templates(
         name = "%s-export-templates" % name,
+        repo_name = repo_name,
         sha256 = digests[_sha256(name = "godot-export-templates", **common)],
         **common,
     )
