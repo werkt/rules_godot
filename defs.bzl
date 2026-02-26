@@ -59,7 +59,7 @@ _godot_binary = rule(
     attrs = {
         "plugins": attr.string_list(),
         "srcs": attr.label_list(),
-        "_godot": attr.label(default = "//:godot", allow_single_file = True),
+        "_godot": attr.label(default = "//godot", allow_single_file = True),
     },
 )
 

@@ -1,0 +1,5 @@
+alias(
+    name = "godot",
+    actual = "@godot4.4//:godot",
+    visibility = ["//visibility:public"],
+)

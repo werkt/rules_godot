@@ -14,6 +14,7 @@ http_archive(
     name = "rules_godot",
     urls = ["https://github.com/werkt/rules_godot/archive/<commit>.zip"],
     sha256 = "<checksum of above>",
+    strip_prefix = "rules_godot-<commit>",
 )
 
 load("@rules_godot//:repository.bzl", "godot_repositories")
