@@ -1,5 +1,4 @@
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
-load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 
 """godot_binary."""
 
