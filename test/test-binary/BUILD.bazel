@@ -1,4 +1,4 @@
-load("@godot//:defs.bzl", "godot_binary")
+load("@godot4.4//:defs.bzl", "godot_binary")
 
 godot_binary(
     name = "godot-test",

@@ -27,7 +27,7 @@ def _godot_binary_impl(ctx):
     # ctx.srcs.short_path must be a single directory
 
     res = ctx.files.srcs[0].path
-    godot = ctx.file._godot.path
+    godot = ctx.file.godot.path
     commands = [
         "mkdir -p %s/godot/{cache,feature_profiles}" % res,  # suppress some warnings/errors during build, possibly fatal
         # "export HOME=$PWD", # godot wants to see $HOME/.local/share/godot/export_templates populated, but it does not seem to do so in the sandbox
@@ -48,7 +48,7 @@ def _godot_binary_impl(ctx):
     ctx.actions.run_shell(
         command = "; ".join(commands),
         inputs = ctx.files.srcs,
-        tools = ctx.files._godot,
+        tools = ctx.files.godot,
         outputs = outputs,
     )
     return DefaultInfo(files = depset(outputs), executable = binary)
@@ -59,7 +59,7 @@ _godot_binary = rule(
     attrs = {
         "plugins": attr.string_list(),
         "srcs": attr.label_list(),
-        "_godot": attr.label(default = "//godot", allow_single_file = True),
+        "godot": attr.label(allow_single_file = True),
     },
 )
 
@@ -69,6 +69,7 @@ def godot_binary(
         export_templates = "godot-export-templates",
         version = "4.4",
         flavor = "stable",
+        repo_name = "godot",
         srcs = [],
         plugins = {}):
 
@@ -107,4 +108,5 @@ def godot_binary(
         name = name,
         srcs = [":res"],
         plugins = plugin_names,
+        godot = "@%s//:godot" % repo_name,
     )

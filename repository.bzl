@@ -108,9 +108,10 @@ def godot_binary(*, version = None, flavor = None, **kwargs):
     _godot_binary(
         version = "%s",
         flavor = "%s",
+        repo_name = "%s",
         export_templates = "%s-export-templates",
         **kwargs)
-""" % (a.repo_name, a.version, a.flavor, a.name),
+""" % (a.repo_name, a.version, a.flavor, a.name, a.name),
        executable = False,
     )
 
