@@ -7,6 +7,27 @@ Use this library to:
 1. Facilitate a Godot repository suite to build projects into binaries with export templates
 1. Build gdextensions against matching godot-cpp version
 
+## bzlmod
+
+```
+RULES_GODOT_COMMIT="<commit>"
+bazel_dep(name="rules_godot", version=RULES_GODOT_COMMIT)
+
+git_override(
+    module_name = "rules_godot",
+    remote = "https://github.com/werkt/rules_godot",
+    commit = RULES_GODOT_COMMIT,
+)
+
+godot = use_extension("@rules_godot//godot:extensions.bzl", "godot")
+
+godot.download()
+
+use_repo(godot, "godot")
+```
+
+## WORKSPACE
+
 ```
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
@@ -41,6 +62,65 @@ Your project should contain:
 
 an export profile targetting linux
   with the setting "Embed PCK" turned on
+
+# Plugins
+
+## bzlmod
+
+To select and use a godot-cpp archive as well for building gdextensions C++ modules:
+
+```
+godot.cpp(name = "godot-cpp", version = "4.4")
+
+use_repo(godot, "godot")
+```
+
+## WORKSPACE
+
+```
+load("@rules_godot//godot:cpp.bzl", "godot_cpp_rule")
+
+godot_cpp_rule(name = "godot-cpp", version="4.4")
+```
+
+Create a cc_binary rule with `name = "<plugin-name>.so"` and `linkshared = True` that depends on `"@godot-cpp"`
+
+Create a `<name>.gdextension` file in your project's `bin/` directory that identifies your plugin relatively by name:
+
+```
+[configuration]
+
+entry_symbol = "plugin_entry_point"
+compatibility_minimum = "4.1"
+reloadable = true
+
+[libraries]
+
+; macos.debug = "./lib<name>.macos.template_debug.dylib"
+; macos.release = "./lib<name>.macos.template_release.dylib"
+; windows.debug.x86_32 = "./<name>.windows.template_debug.x86_32.dll"
+; windows.release.x86_32 = "./<name>.windows.template_release.x86_32.dll"
+; windows.debug.x86_64 = "./<name>.windows.template_debug.x86_64.dll"
+; windows.release.x86_64 = "./<name>.windows.template_release.x86_64.dll"
+linux.debug.x86_64 = "./lib<name>.linux.template_debug.x86_64.so"
+; linux.release.x86_64 = "./lib<name>.linux.template_release.x86_64.so"
+; linux.debug.arm64 = "./lib<name>.linux.template_debug.arm64.so"
+; linux.release.arm64 = "./lib<name>.linux.template_release.arm64.so"
+; linux.debug.rv64 = "./lib<name>.linux.template_debug.rv64.so"
+; linux.release.rv64 = "./lib<name>.linux.template_release.rv64.so"
+```
+
+Add a plugin mapping for a `godot_binary` target into a path specified by the gdextensions file:
+
+```
+    plugins = {
+        "//path/to:<plugin-name>.so": "bin/lib<name>.linux.template_debug.x86_64.so",
+    },
+```
+
+Populating other configs as necessary.
+
+# Testing rules_godot itself
 
 Testing binary:
 

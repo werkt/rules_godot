@@ -1,7 +1,4 @@
-filegroup(
-    name = "srcs",
-    srcs = glob(["**"]),
-)
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 
 cc_library(
     name = "godot-cpp",
@@ -12,13 +9,13 @@ cc_library(
         "src/variant/*.cpp",
         "gen/src/classes/*.cpp",
         "gen/src/variant/*.cpp",
-    ]),
+    ], allow_empty=True),
     hdrs = glob([
         "include/**/*.hpp",
         "include/**/*.inc",
         "gen/include/**/*.hpp",
         "gdextension/**/*.h",
-    ]),
+    ], allow_empty=True),
     includes = [
         "gdextension",
         "gen/include",

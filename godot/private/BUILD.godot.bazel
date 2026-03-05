@@ -1,0 +1,13 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
+filegroup(
+    name = "godot",
+    srcs = ["Godot_v{version}-{flavor}_{os}.{arch}"],
+    visibility = {visibility},
+)
+
+filegroup(
+    name = "srcs",
+    srcs = glob(["**"]),
+    visibility = {visibility},
+)
